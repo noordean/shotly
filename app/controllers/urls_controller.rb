@@ -8,7 +8,8 @@ class UrlsController < ApplicationController
       json_response(existing_url)
     else
       url = Url.create!(
-        original_url: handle_url_format(params[:original_url])
+        original_url: handle_url_format(params[:original_url]),
+        number_of_click: 0
       )
       shortened_url = generate_url(url.id)
       updated_url = Url.update(
@@ -16,6 +17,21 @@ class UrlsController < ApplicationController
         shortened_url: "http://#{request.host_with_port}/#{shortened_url}"
       )
       json_response(updated_url, :created)
+    end
+  end
+
+  # GET /:path
+  def redirect
+    url = Url.find_by(
+      shortened_url: "http://#{request.host_with_port}/#{params[:path]}"
+    )
+    if url
+      url.update(number_of_click: url.number_of_click + 1)
+      redirect_to(url.original_url, status: 302)
+    else
+      json_response({
+                      message: "Page Not Found"
+                    }, :not_found)
     end
   end
 
@@ -30,6 +46,6 @@ class UrlsController < ApplicationController
   end
 
   def url_params
-    params.permit(:original_url, :user_id)
+    params.permit(:original_url, :number_of_click, :user_id)
   end
 end
