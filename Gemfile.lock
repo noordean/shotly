@@ -58,6 +58,7 @@ GEM
     faker (1.8.7)
       i18n (>= 0.7)
     ffi (1.9.21)
+    geocoder (1.4.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     i18n (0.9.4)
@@ -163,6 +164,7 @@ DEPENDENCIES
   dotenv-rails
   factory_girl_rails (~> 4.0)
   faker
+  geocoder
   listen (~> 3.0.5)
   pg (~> 0.20)
   puma (~> 3.0)
