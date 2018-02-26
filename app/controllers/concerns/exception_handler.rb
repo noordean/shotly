@@ -1,6 +1,9 @@
 module ExceptionHandler
   extend ActiveSupport::Concern
 
+  class DecodeError < StandardError; end
+  class ExpiredSignature < StandardError; end
+
   included do
     rescue_from ActiveRecord::RecordNotFound do |error|
       json_response({ message: error.message }, :not_found)
@@ -17,6 +20,18 @@ module ExceptionHandler
       else
         json_response({ message: display_message }, :unprocessable_entity)
       end
+    end
+
+    rescue_from ExceptionHandler::DecodeError do |_error|
+      json_response({
+                      message: "Access denied!. Invalid token supplied."
+                    }, :unauthorized)
+    end
+
+    rescue_from ExceptionHandler::ExpiredSignature do |_error|
+      json_response({
+                      message: "Access denied!. Token has expired."
+                    }, :unauthorized)
     end
   end
 end

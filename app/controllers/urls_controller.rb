@@ -9,7 +9,8 @@ class UrlsController < ApplicationController
     else
       url = Url.create!(
         original_url: handle_url_format(params[:original_url]),
-        number_of_click: 0
+        number_of_click: 0,
+        user_id: current_user
       )
       shortened_url = generate_url(url.id)
       updated_url = Url.update(
@@ -36,6 +37,12 @@ class UrlsController < ApplicationController
     end
   end
 
+  # GET /user/urls
+  def get_user_urls
+    urls = User.find(current_user).urls
+    json_response(urls)
+  end
+
   private
 
   def handle_url_format(url)
@@ -47,6 +54,6 @@ class UrlsController < ApplicationController
   end
 
   def url_params
-    params.permit(:original_url, :number_of_click, :user_id)
+    params.permit(:original_url, :number_of_click)
   end
 end
