@@ -43,6 +43,13 @@ class UrlsController < ApplicationController
     json_response(urls)
   end
 
+  # GET /urls/total
+  def get_total_url
+    json_response({
+      message: Url.all.size
+    })
+  end
+
   private
 
   def handle_url_format(url)

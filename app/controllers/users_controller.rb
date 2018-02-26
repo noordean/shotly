@@ -27,6 +27,13 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/total
+  def get_total_user
+    json_response({
+      message: User.all.size
+    })
+  end
+
   private
 
   def user_params
