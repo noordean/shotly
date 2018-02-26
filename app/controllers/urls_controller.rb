@@ -28,7 +28,7 @@ class UrlsController < ApplicationController
     )
     if url
       url.update(number_of_click: url.number_of_click + 1)
-      Location.create!(country: request.location.city, url_id: url.id)
+      Location.create!(country: request.location.data["country_name"], url_id: url.id)
       redirect_to(url.original_url, status: 302)
     else
       json_response({
