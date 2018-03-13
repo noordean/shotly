@@ -1,5 +1,4 @@
 class LocationsController < ApplicationController
-
   # GET /url/:id/locations
   def get_url_locations
     if url_creator?(params[:id])
@@ -7,8 +6,8 @@ class LocationsController < ApplicationController
       json_response(locations)
     else
       json_response({
-        message: "Only the url creator can access its locations"
-      }, :unauthorized)
+                      message: "Only the url creator can access its locations"
+                    }, :unauthorized)
     end
   end
 

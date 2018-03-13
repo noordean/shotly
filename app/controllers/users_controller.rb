@@ -1,7 +1,15 @@
 class UsersController < ApplicationController
   def create
     user = User.create!(user_params)
-    json_response(user, :created)
+    json_response(
+      {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        token: Authentication.new(user_params).generate_token
+      },
+      :created
+    )
   end
 
   def login
@@ -15,7 +23,9 @@ class UsersController < ApplicationController
       auth_object = Authentication.new(login_params)
       if auth_object.authenticate
         json_response(
-          message: "Login successful!", token: auth_object.generate_token
+          message: "Login successful!",
+          username: login_params[:username],
+          token: auth_object.generate_token
         )
       else
         json_response(
@@ -29,9 +39,9 @@ class UsersController < ApplicationController
 
   # GET /users/total
   def get_total_user
-    json_response({
+    json_response(
       message: User.all.size
-    })
+    )
   end
 
   private

@@ -45,9 +45,9 @@ class UrlsController < ApplicationController
 
   # GET /urls/total
   def get_total_url
-    json_response({
+    json_response(
       message: Url.all.size
-    })
+    )
   end
 
   private
