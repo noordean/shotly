@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218162902) do
+ActiveRecord::Schema.define(version: 20180318080738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,8 +18,9 @@ ActiveRecord::Schema.define(version: 20180218162902) do
   create_table "locations", force: :cascade do |t|
     t.string   "country"
     t.integer  "url_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "number_of_click"
     t.index ["url_id"], name: "index_locations_on_url_id", using: :btree
   end
 
