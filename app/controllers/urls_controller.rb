@@ -28,7 +28,16 @@ class UrlsController < ApplicationController
     )
     if url
       url.update(number_of_click: url.number_of_click + 1)
-      Location.create!(country: request.location.data["country_name"], url_id: url.id)
+      location = Location.where(
+        country: request.location.data["country_name"],
+        url_id: url.id
+      )
+      if !location.empty?
+        location[0].update(number_of_click: location[0].number_of_click + 1)
+      else
+        Location.create!(country: request.location.data["country_name"], url_id: url.id, number_of_click: 1)
+      end
+
       redirect_to(url.original_url, status: 302)
     else
       json_response({
@@ -39,8 +48,15 @@ class UrlsController < ApplicationController
 
   # GET /user/urls
   def get_user_urls
-    urls = User.find(current_user).urls
-    json_response(urls)
+    urls = User.find(current_user).urls.includes(:locations)
+    complete_urls = []
+    urls.each do |url|
+      new_url = [url]
+      new_url << url.locations
+      complete_urls << new_url
+    end
+
+    json_response(complete_urls)
   end
 
   # GET /urls/total
