@@ -1,6 +1,6 @@
 class Url < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :locations
+  has_many :locations, dependent: :destroy
 
   validates_presence_of :original_url
   validates :original_url, uniqueness: { case_sensitive: false }, format: {
