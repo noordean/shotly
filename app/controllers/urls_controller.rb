@@ -65,6 +65,44 @@ class UrlsController < ApplicationController
       message: Url.all.size
     )
   end
+  
+  # DELETE /urls/:id
+  def destroy
+    url = Url.find(params[:id])
+    if current_user != url.user_id
+      json_response({
+        message: "You are not authorized to delete this url"
+      }, :forbidden)
+    elsif Url.destroy(params[:id])
+      json_response(
+        message: "Url deleted successfully"
+      )
+    else
+      json_response({
+                      message: "Unable to delete url"
+                    }, :internal_server_error)
+    end
+  end
+
+  # PUT /urls/:id
+  def update
+    url = Url.find(params[:id])
+    shortened_chars = params[:shortened_characters]
+    if shortened_chars.nil? || shortened_chars.strip.empty?
+      json_response({
+        message: "The shortened characters cannot be empty"
+      }, :bad_request)
+    else
+      if current_user != url.user_id
+        json_response({
+          message: "You are not authorized to update this url"
+        }, :forbidden)
+      else
+        updated_url = Url.update(params[:id], shortened_url: "http://#{request.host_with_port}/#{shortened_chars}")
+        json_response(updated_url, :created)
+      end
+    end
+  end
 
   private
 
