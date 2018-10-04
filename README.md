@@ -31,7 +31,7 @@ This app was developed using ruby on rails with postgres database.
 
 5. <b>POST:</b> /urls <br>
    <b>Payloads:</b>
-      - original_string(string)
+      - original_url(string)
    <b>Headers:</b>
       - token(string) optional
 
